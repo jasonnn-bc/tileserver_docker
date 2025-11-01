@@ -1,0 +1,36 @@
+{
+  "options": {
+    "paths": {
+      "root": "/data"
+    }
+  },
+  "styles": {
+    "dark-matter": {
+      "style": "styles/dark-matter.json"
+    },
+    "maptiler-toner": {
+      "style": "styles/maptiler-toner.json"
+    },
+    "osm-openmaptiles": {
+      "style": "styles/osm-openmaptiles.json"
+    },
+    "fiord-color": {
+      "style": "styles/fiord-color.json"
+    },
+    "osm-bright": {
+      "style": "styles/osm-bright.json"
+    },
+    "positron": {
+      "style": "styles/positron.json"
+    },
+    "voyager": {
+      "style": "styles/voyager.json"
+    }
+  },
+  "data": {
+    "planet": {
+      "mbtiles": "mbtiles/maptiler-osm-2020-02-10-v3.11-planet.mbtiles"
+    }
+  }
+}
+
