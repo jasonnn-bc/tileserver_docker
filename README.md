@@ -1,88 +1,112 @@
-![tileserver-gl](https://cloud.githubusercontent.com/assets/59284/18173467/fa3aa2ca-7069-11e6-86b1-0f1266befeb6.jpeg)
+# 🗺️ TileServer GL (Local Setup)
 
-# TileServer GL
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/maptiler/tileserver-gl/pipeline.yml)](https://github.com/maptiler/tileserver-gl/actions/workflows/pipeline.yml)
-[![Docker Hub](https://img.shields.io/badge/docker-hub-blue.svg)](https://hub.docker.com/r/maptiler/tileserver-gl/)
+This project is a **fork of TileServer GL**, designed to run locally and serve vector tiles using preconfigured map styles.
 
-Vector and raster maps with GL styles. Server-side rendering by MapLibre GL Native. Map tile server for MapLibre GL JS, Android, iOS, Leaflet, OpenLayers, GIS via WMTS, etc.
+## 📦 Free Map Data
 
-Download vector tiles from [OpenMapTiles](https://data.maptiler.com/downloads/planet/).
-## Getting Started with Node
+TileServer GL uses **MBTiles** datasets that can be freely downloaded from [MapTiler's OSM dataset page](https://www.maptiler.com/on-prem-datasets/dataset/osm/#4.5/42.28/3.94). These datasets are based on OpenStreetMap and provide global coverage.
 
-Make sure you have Node.js version **18.17.0** or above installed. Node 22 is recommended. (running `node -v` it should output something like `v22.x.x`). Running without docker requires [Native dependencies](https://maptiler-tileserver.readthedocs.io/en/latest/installation.html#npm) to be installed first.
-
-Install `tileserver-gl` with server-side raster rendering of vector tiles with npm. 
+Once downloaded, place your `.mbtiles` files inside the `mbtiles` directory at the root of the project:
 
 ```bash
-npm install -g tileserver-gl
+./mbtiles/your-map-data.mbtiles
 ```
 
-Once installed, you can use it like the following examples.
+## 🎨 Available Map Styles
 
-using a mbtiles file
+The following map styles are preconfigured and ready to use:
+
+- `dark-matter`: A dark-themed basemap optimized for data visualizations with minimal distractions.
+- `fiord-color`: A deep blue basemap inspired by Positron, ideal for elegant data overlays.
+- `toner`: A high-contrast black-and-white style designed for clarity and bold visual impact.
+- `bright`: A clean and colorful map style that highlights geographic features and points of interest.
+- `osm-openmaptiles`: A comprehensive style showcasing all OpenStreetMap features, inspired by the classic OSM Carto design.
+- `positron`: A minimalist light basemap with subtle colors, perfect for overlaying custom data layers.
+- `voyager`: A richly detailed basemap optimized for mobile and urban navigation, with clear street-level context.
+
+
+## 🐳 Docker Installation
+Before running container make you sure you have the following requirements installed.
+### Requirements
+
+- **Docker**: Tested with version 28.5.1
+
+### 1️⃣ Pull the official TileServer GL image
+
+First, build a base image that includes all required libraries.
+
 ```bash
-wget https://github.com/maptiler/tileserver-gl/releases/download/v1.3.0/zurich_switzerland.mbtiles
-tileserver-gl --file zurich_switzerland.mbtiles
-[in your browser, visit http://[server ip]:8080]
+docker pull maptiler/tileserver-gl:v5.4.0
 ```
+This version (v5.4.0) has been tested and approved for this setup. You may use the latest tag at your own risk, as newer versions may introduce breaking changes or configuration differences.
 
-using a config.json + style + mbtiles file
+### 2️⃣ Run container
+
+Navigate to the root of your project (e.g., cd tileserver_docker) and run the following command:
+
 ```bash
-wget https://github.com/maptiler/tileserver-gl/releases/download/v1.3.0/test_data.zip
-unzip test_data.zip
-tileserver-gl
-[in your browser, visit http://[server ip]:8080]
+docker run --name tileserver --rm -it -v $(pwd):/data -p 8080:8080 maptiler/tileserver-gl:v5.4.0
 ```
+⚠️ Note : In newer versions, the container binds to port 8080 by default.
 
-Alternatively, you can use the `tileserver-gl-light` npm package instead, which is pure javascript, does not have any native dependencies, and can run anywhere, but does not contain rasterization on the server side made with Maplibre GL Native.
+### 3️⃣ Test the server
 
-## Getting Started with Docker
+Open your browser and go to [http://localhost:8080](http://localhost:8080). You can explore the available map styles and datasets directly from the interface.  
 
-An alternative to npm to start the packed software easier is to install [Docker](https://www.docker.com/) on your computer and then run from the tileserver-gl directory
+This is the default menu on TileServer :  
 
-Example using a mbtiles file
-```bash
-wget https://github.com/maptiler/tileserver-gl/releases/download/v1.3.0/zurich_switzerland.mbtiles
-docker run --rm -it -v $(pwd):/data -p 8080:8080 maptiler/tileserver-gl:latest --file zurich_switzerland.mbtiles
-[in your browser, visit http://[server ip]:8080]
+![Alt text](images/tileserver_menu.png)  
+
+Click on `Viewer` to test the style and data :  
+
+![Alt text](images/toulon_rade.png)
+## 🎨 Adding Custom Styles
+
+To add new styles, add your style files inside the `styles` directory. Make sure each style includes the following key-value pair in its `"sources"` section:
+
+```json
+"sources": {
+  "openmaptiles": {
+    "type": "vector",
+    "url": "mbtiles://planet"
+  }
+}
 ```
-
-Example using a config.json + style + mbtiles file
-```bash
-wget https://github.com/maptiler/tileserver-gl/releases/download/v1.3.0/test_data.zip
-unzip test_data.zip
-docker run --rm -it -v $(pwd):/data -p 8080:8080 maptiler/tileserver-gl:latest
-[in your browser, visit http://[server ip]:8080]
+This ensures the style correctly references the MBTiles dataset.  
+Next, update the `config.json` file at the root of the project by adding your styles to the `"styles"` section:
+```json
+"styles": {
+  "dark-matter": {
+    "style": "styles/dark-matter.json"
+  },
+  "mon-style": {
+    "style": "styles/mon-style.json"
+  }
+  // Add more styles as needed
+}
 ```
+✅ Your custom style is now ready to use!
 
-Example using a different path
-```bash
-docker run --rm -it -v /your/local/config/path:/data -p 8080:8080 maptiler/tileserver-gl:latest
+## 🗂️ Adding New MBTiles Datasets
+
+To add new tile datasets, add your `.mbtiles` files into the `mbtiles` directory.
+
+Then, update the `config.json` file by adding the following lines under the `"data"` section:
+
+```json
+"data": {
+  "your-dataset-name": {
+    "mbtiles": "mbtiles/your-dataset-file.mbtiles"
+  }
+}
 ```
-replace '/your/local/config/path' with the path to your config file
-
-
-Alternatively, you can use the `maptiler/tileserver-gl-light:latest` docker image instead, which is pure javascript, does not have any native dependencies, and can run anywhere, but does not contain rasterization on the server side made with Maplibre GL Native.
-
-## Getting Started with Linux cli
-
-Test from command line
-```bash
-wget https://github.com/maptiler/tileserver-gl/releases/download/v1.3.0/test_data.zip
-unzip -q test_data.zip -d test_data
-xvfb-run --server-args="-screen 0 1024x768x24" npm test
+To use this new dataset in a style, either modify an existing style or duplicate one, and update the `"sources"` section like this:
+```json
+"sources": {
+  "openmaptiles": {
+    "type": "vector",
+    "url": "mbtiles://your-dataset-name"
+  }
+}
 ```
-
-Run from command line
-```bash
-xvfb-run --server-args="-screen 0 1024x768x24" node .
-```
-
-## Documentation
-
-You can read the full documentation of this project at https://tileserver.readthedocs.io/en/latest/.
-
-## Alternative
-
-Discover MapTiler Server if you need a [map server with easy setup and user-friendly interface](https://www.maptiler.com/server/).
-
+✅ Your new tileset is now integrated and ready to be displayed !
