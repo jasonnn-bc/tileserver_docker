@@ -1,36 +1,57 @@
 {
   "options": {
     "paths": {
-      "root": "/data"
+      "fonts": "fonts",
+      "styles": "styles"
     }
   },
   "styles": {
-    "dark-matter": {
-      "style": "styles/dark-matter.json"
-    },
-    "maptiler-toner": {
-      "style": "styles/maptiler-toner.json"
+    "osm-bright": {
+      "style": "osm-bright/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     },
     "osm-openmaptiles": {
-      "style": "styles/osm-openmaptiles.json"
+      "style": "osm-openmaptiles/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
+    },
+    "dark-matter": {
+      "style": "dark-matter/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     },
     "fiord-color": {
-      "style": "styles/fiord-color.json"
+      "style": "fiord-color/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     },
-    "osm-bright": {
-      "style": "styles/osm-bright.json"
+    "maptiler-toner": {
+      "style": "maptiler-toner/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     },
     "positron": {
-      "style": "styles/positron.json"
+      "style": "positron/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     },
     "voyager": {
-      "style": "styles/voyager.json"
+      "style": "voyager/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
     }
   },
   "data": {
-    "planet": {
+    "openmaptiles": {
       "mbtiles": "mbtiles/maptiler-osm-2020-02-10-v3.11-planet.mbtiles"
     }
   }
 }
-
