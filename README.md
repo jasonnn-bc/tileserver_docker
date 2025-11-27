@@ -68,7 +68,7 @@ To add new styles, add your style files inside the `styles` directory. Make sure
 "sources": {
   "openmaptiles": {
     "type": "vector",
-    "url": "mbtiles://planet"
+    "url": "mbtiles://openmaptiles"
   }
 }
 ```
@@ -77,16 +77,41 @@ Next, update the `config.json` file at the root of the project by adding your st
 ```json
 "styles": {
   "dark-matter": {
-    "style": "styles/dark-matter.json"
+    "style": "dark-matter/style.json",
+    "tilejson": {
+      "type": "overlay"
+      }
   },
   "mon-style": {
-    "style": "styles/mon-style.json"
-  }
+      "style": "mon-style/style.json",
+      "tilejson": {
+        "type": "overlay"
+      }
+    }
   // Add more styles as needed
 }
 ```
 ✅ Your custom style is now ready to use!
+### Optional : Areas 🌍
 
+✨ You can define a **default area and zoom level** for each style in Tileserver‑GL.  
+This means that when a user opens the style in the web interface, the map will automatically start centered on the location you specify.  
+
+🎯 The `center` property takes three values: `[longitude, latitude, zoom]`.  
+It ensures that your style always opens at the right place and scale, without requiring manual navigation.  
+
+```json
+{
+  "styles": {
+    "osm-bright": {
+      "style": "styles/osm-bright/style.json",
+      "tilejson": {
+        "center": [8.54, 47.37, 12]
+      }
+    }
+  }
+}
+```
 ## 🗂️ Adding New MBTiles Datasets
 
 To add new tile datasets, add your `.mbtiles` files into the `mbtiles` directory.
