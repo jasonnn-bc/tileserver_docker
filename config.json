@@ -30,8 +30,8 @@
         "type": "overlay"
       }
     },
-    "maptiler-toner": {
-      "style": "maptiler-toner/style.json",
+    "toner": {
+      "style": "toner/style.json",
       "tilejson": {
         "type": "overlay"
       }
